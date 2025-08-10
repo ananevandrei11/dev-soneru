@@ -3,12 +3,16 @@ import {
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
+  type LoaderFunction,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { Header } from "./widgets/Header";
+import { getSession } from "./session.server";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,17 +27,32 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+const publicPaths = ["/login", "/signup", "/forgot-password"];
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = session.get("userId");
+  const url = new URL(request.url);
+
+  if (!userId && !publicPaths.includes(url.pathname)) {
+    return await redirect("/login");
+  }
+  return { userId };
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="flex flex-col h-full">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <footer>Footer</footer>
         <ScrollRestoration />
         <Scripts />
       </body>
