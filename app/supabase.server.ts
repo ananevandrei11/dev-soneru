@@ -12,6 +12,10 @@ export function createServerClient({
 }) {
   const supabaseUrl = SUPABASE_URL;
   const supabaseKey = SUPABASE_ANON_KEY;
+  console.log({
+    supabaseUrl,
+    supabaseKey
+  })
 
   const supabase = createClient(supabaseUrl, supabaseKey, {
     global: { headers: { cookie: request.headers.get("cookie") || "" } },
