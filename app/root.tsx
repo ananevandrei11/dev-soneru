@@ -12,7 +12,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Header } from "./widgets/Header";
-import { getSession } from "./session.server";
+import type { AppLoadContext } from "react-router";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,8 +29,8 @@ export const links: Route.LinksFunction = () => [
 
 const publicPaths = ["/login", "/signup", "/forgot-password"];
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
+export const loader: LoaderFunction<AppLoadContext> = async ({ request, context }) => {
+  const session = await context.session.getSession(request.headers.get("Cookie"));
   const userId = session.get("userId");
   const url = new URL(request.url);
 

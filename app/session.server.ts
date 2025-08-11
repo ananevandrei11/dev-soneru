@@ -8,8 +8,22 @@ type SessionFlashData = {
   error: string;
 };
 
-const DOMAIN = import.meta.env.VITE_DOMAIN as string;
-console.log("DOMAIN", DOMAIN);
+export function createSessionStorage(env: Env) {
+  return createCookieSessionStorage<SessionData, SessionFlashData>({
+    cookie: {
+      name: "__session",
+      domain: env.DOMAIN,
+      httpOnly: true,
+      maxAge: 60,
+      path: "/",
+      sameSite: "lax",
+      secrets: ["s3cret1-soneru"],
+      secure: true,
+    },
+  });
+}
+
+/*
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>(
     {
@@ -18,7 +32,7 @@ const { getSession, commitSession, destroySession } =
         name: "__session",
 
         // all of these are optional
-        domain: DOMAIN, // ".ujlpjcbjlf2011.workers.dev",
+        // domain: env.DOMAIN, // ".ujlpjcbjlf2011.workers.dev",
         // Expires can also be set (although maxAge overrides it when used in combination).
         // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
         //
@@ -34,3 +48,4 @@ const { getSession, commitSession, destroySession } =
   );
 
 export { getSession, commitSession, destroySession };
+*/
