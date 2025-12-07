@@ -32,7 +32,7 @@ const { getSession, commitSession, destroySession } =
         name: "__session",
 
         // all of these are optional
-        // domain: env.DOMAIN, // ".ujlpjcbjlf2011.workers.dev",
+        // domain: env.DOMAIN,,
         // Expires can also be set (although maxAge overrides it when used in combination).
         // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
         //
@@ -41,7 +41,7 @@ const { getSession, commitSession, destroySession } =
         maxAge: 60,
         path: "/",
         sameSite: "lax",
-        secrets: ["s3cret1"],
+        secrets: ["some secret"],
         secure: true,
       },
     },
