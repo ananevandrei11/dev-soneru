@@ -10,8 +10,10 @@ export default [
   loginRoute,
   route("collections", "routes/collections.tsx"),
   route("collections/product/:id", "routes/collections.product.id.tsx"),
-  // ...prefix("collections", [
-  //   index("routes/collections.tsx"),
-  //   route("collections/product/:id", "routes/collections.product.id.tsx")
-  // ]),
+  /*
+  ...prefix("collections", [
+    index("routes/collections.tsx"),
+    route("collections/product/:id", "routes/collections.product.id.tsx")
+  ]),
+  */
 ] satisfies RouteConfig;

@@ -49,7 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col h-full">
+      <body className="flex flex-col min-h-full bg-gradient-to-br from-blue-50 to-indigo-100 p-4 scroll-smooth">
         <Header />
         <main className="flex-1">{children}</main>
         <footer>Footer</footer>

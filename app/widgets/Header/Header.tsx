@@ -1,3 +1,3 @@
 export const Header = () => {
-  return <h1>Header</h1>;
+  return <header className="w-full"><h1>Header</h1></header>;
 };
