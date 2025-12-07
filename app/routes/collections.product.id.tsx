@@ -9,14 +9,15 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function Component({
   loaderData,
 }: Route.ComponentProps) {
+  /*
   const matches = useMatches();
-  console.log(matches);
-  // const crumbs = useMemo(
-  //   () =>
-  //     // matches
-  //     //   .filter((match) => Boolean((match.handle as { crumb?: CrumbType })?.crumb))
-  //     //   .map((match) => (match.handle as { crumb: CrumbType })?.crumb(match.params.id)),
-  //   [matches],
-  // );
+  const crumbs = useMemo(
+    () =>
+      // matches
+      //   .filter((match) => Boolean((match.handle as { crumb?: CrumbType })?.crumb))
+      //   .map((match) => (match.handle as { crumb: CrumbType })?.crumb(match.params.id)),
+    [matches],
+  );
+  */
   return <h1>{loaderData?.id}</h1>;
 }

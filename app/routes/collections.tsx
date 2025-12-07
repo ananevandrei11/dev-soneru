@@ -5,9 +5,6 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { id: context.cloudflare.ctx.props };
 }
 
-export default function Component({
-  loaderData,
-}: Route.ComponentProps) {
-  console.log(loaderData);
+export default function Component({ }: Route.ComponentProps) {
   return <h1>Collections</h1>;
 }
