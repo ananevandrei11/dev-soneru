@@ -8,14 +8,4 @@
     "enabled": true
   },
   "upload_source_maps": true,
-  "env": {
-    "production": {
-      "name": "soneru",
-      "workers_dev": true
-    },
-    "development": {
-      "name": "soneru-dev",
-      "workers_dev": true
-    }
-  }
 }
