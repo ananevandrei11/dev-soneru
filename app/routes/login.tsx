@@ -1,32 +1,27 @@
-import { Form, redirect, type ActionFunction } from "react-router";
-import { commitSession, getSession } from "~/session.server";
-import { createServerClient } from "~/supabase.server";
+import { Form, redirect, type ActionFunction, type AppLoadContext } from "react-router";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<AppLoadContext> = async ({ request, context }) => {
   const form = await request.formData();
   const email = form.get("email") as string;
   const password = form.get("password") as string;
 
-  const { supabase, response } = createServerClient({
-    request,
-    response: new Response(),
-  });
-
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const response = new Response();
+  const { supabaseAuth, session: sessionCtx } = context;
+  const { data, error } = await supabaseAuth.auth.signInWithPassword({ email, password });
   if (error || !data.session) {
     return { error: error?.message || "Error Login" };
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await sessionCtx.getSession(request.headers.get("Cookie"));
   session.set("userId", data.user.id);
-  response.headers.append("Set-Cookie", await commitSession(session));
+  response.headers.append("Set-Cookie", await sessionCtx.commitSession(session));
 
   return redirect("/", { headers: response.headers });
 };
 
 export default function LoginRoute() {
   return (
-    <Form method="post" action="/login">
+    <Form method="POST" action="/login">
       <div>
         <label>
           Email

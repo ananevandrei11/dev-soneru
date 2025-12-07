@@ -6,6 +6,7 @@ import {
   redirect,
   Scripts,
   ScrollRestoration,
+  type AppLoadContext,
   type LoaderFunction,
 } from "react-router";
 
@@ -29,15 +30,15 @@ export const links: Route.LinksFunction = () => [
 
 const publicPaths = ["/login", "/signup", "/forgot-password"];
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
+export const loader: LoaderFunction<AppLoadContext> = async ({ request, context }) => {
+  const session = await context?.session.getSession(request.headers.get("Cookie"));
   const userId = session.get("userId");
   const url = new URL(request.url);
 
   if (!userId && !publicPaths.includes(url.pathname)) {
     return await redirect("/login");
   }
-  return { userId };
+  return { userId: userId ?? "unknown" };
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
