@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { Route } from "./+types/collections.product.id";
 import { useMatches } from "react-router";
+import { ROUTES } from "~/shared/route-path";
 
 export async function loader({ params }: Route.LoaderArgs) {
   return { id: params.id };

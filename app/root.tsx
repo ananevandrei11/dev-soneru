@@ -6,9 +6,10 @@ import {
   redirect,
   Scripts,
   ScrollRestoration,
-  type AppLoadContext,
-  type LoaderFunction,
+  useRouteLoaderData,
+  type LoaderFunctionArgs,
 } from "react-router";
+import { ROUTES } from "~/shared/route-path";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -27,20 +28,23 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-const publicPaths = ["/login", "/signup", "/forgot-password"];
+const publicPaths = [ROUTES.LOGIN, "/signup", "/forgot-password"];
 
-export const loader: LoaderFunction<AppLoadContext> = async ({ request, context }) => {
-  const session = await context?.session.getSession(request.headers.get("Cookie"));
-  const userId = session.get("userId");
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const session = await context.session.getSession(request.headers.get("Cookie"));
+
+  const userId = session.data.userId;
   const url = new URL(request.url);
 
   if (!userId && !publicPaths.includes(url.pathname)) {
-    return await redirect("/login");
+    throw redirect("/login");
   }
-  return { userId: userId ?? "unknown" };
-};
+  return { isLogged: !!userId };
+}
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children, }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
+
   return (
     <html lang="en" className="h-full">
       <head>
@@ -49,8 +53,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col min-h-full bg-gradient-to-br from-blue-50 to-indigo-100 p-4 scroll-smooth">
-        <Header />
+      <body className="flex flex-col min-h-full from-blue-50 to-indigo-100 scroll-smooth">
+        <Header isLogged={data?.isLogged} />
         <main className="flex-1">{children}</main>
         <footer>Footer</footer>
         <ScrollRestoration />

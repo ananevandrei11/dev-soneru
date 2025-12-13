@@ -1,5 +1,6 @@
 
 import type { Route } from "./+types/collections";
+import { ROUTES } from "~/shared/route-path";
 
 export async function loader({ context }: Route.LoaderArgs) {
   return { id: context.cloudflare.ctx.props };

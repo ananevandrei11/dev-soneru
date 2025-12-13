@@ -1,5 +1,6 @@
 import { Form, redirect, type ActionFunction, type AppLoadContext, useActionData } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { ROUTES } from "~/shared/route-path";
 
 export const action: ActionFunction<AppLoadContext> = async ({ request, context }) => {
   try {
@@ -7,9 +8,8 @@ export const action: ActionFunction<AppLoadContext> = async ({ request, context 
     const email = form.get("email") as string;
     const password = form.get("password") as string;
 
-    const response = new Response();
-    const { supabaseAuth, session: sessionCtx } = context;
-    const { data, error } = await supabaseAuth.auth.signInWithPassword({ email, password });
+    const { supabaseClient, session: sessionCtx } = context;
+    const { data, error } = await supabaseClient.supabase.auth.signInWithPassword({ email, password });
 
     if (error || !data.session) {
       return { error: error?.message || "Error Login" };
@@ -17,9 +17,11 @@ export const action: ActionFunction<AppLoadContext> = async ({ request, context 
 
     const session = await sessionCtx.getSession(request.headers.get("Cookie"));
     session.set("userId", data.user.id);
-    response.headers.append("Set-Cookie", await sessionCtx.commitSession(session, { expires: new Date(Date.now() + 60_000) }));
+    session.set("email", data.user.email);
+    session.set("role", data.user.role);
+    supabaseClient.headers.append("Set-Cookie", await sessionCtx.commitSession(session, { expires: new Date(Date.now() + 60_000) }));
 
-    return redirect("/", { headers: response.headers });
+    return redirect(ROUTES.HOME, { headers: supabaseClient.headers });
   } catch (error) {
     console.error("Login error:", JSON.stringify(error, null, 2));
     return { error: error instanceof Error ? error.message : "An unexpected error occurred during login" };
@@ -43,7 +45,7 @@ export default function LoginRoute() {
           <p className="text-gray-600 mt-2">Log in to your account</p>
         </div>
 
-        <Form method="POST" action="/login" className="space-y-6">
+        <Form method="POST" action={ROUTES.LOGIN} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email

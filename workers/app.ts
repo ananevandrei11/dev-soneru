@@ -9,7 +9,7 @@ declare module "react-router" {
       ctx: ExecutionContext;
     };
     session: ReturnType<typeof createSessionStorage>;
-    supabaseAuth: ReturnType<typeof createSupabaseClient>;
+    supabaseClient: ReturnType<typeof createSupabaseClient>;
   }
 }
 
@@ -21,12 +21,15 @@ const requestHandler = createRequestHandler(
 export default {
   fetch(request, env, ctx) {
     const session = createSessionStorage(env);
-    const supabaseAuth = createSupabaseClient(env, request);
+    const { supabase, headers } = createSupabaseClient(env, request);
 
     return requestHandler(request, {
       cloudflare: { env, ctx },
       session,
-      supabaseAuth,
+      supabaseClient: {
+        supabase,
+        headers
+      },
     });
   },
 } satisfies ExportedHandler<Env>;
