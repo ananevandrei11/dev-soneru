@@ -1,17 +1,16 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { useFetcher, type ActionFunction, type AppLoadContext } from "react-router";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Dev Soneru" },
     { name: "description", content: "Welcome to Dev Soneru!" },
   ];
 }
 
-export function loader({ }: Route.LoaderArgs) {
-  return { message: 'HOME PAGE' };
-}
-
 export default function Home({ loaderData }: Route.ComponentProps) {
-  return <div>{loaderData.message}</div>;
+  const fetcher = useFetcher();
+
+  return <div>HOME
+  </div>;
 }
