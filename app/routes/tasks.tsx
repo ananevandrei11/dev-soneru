@@ -143,7 +143,7 @@ export default function Tasks({ loaderData }: Route.ComponentProps) {
                 <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-900">
                   <fetcher.Form method="DELETE" action={`${ROUTES.TASKS}?id=${task.id}`} className="max-w-md">
                     <button type="submit" className="w-full bg-gradient-to-r from-red-600 to-rose-700 text-white font-medium py-3 px-4 rounded-lg hover:from-red-700 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                      Remove It
+                      Remove
                     </button>
                   </fetcher.Form>
                 </td>
